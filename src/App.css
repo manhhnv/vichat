@@ -32,9 +32,9 @@
   overflow-y: scroll;
 }
 
-#list-friend::-webkit-scrollbar {
+/* #list-friend::-webkit-scrollbar {
   display: none;
-}
+} */
 
 #list-friend:hover::-webkit-scrollbar {
   display: block;

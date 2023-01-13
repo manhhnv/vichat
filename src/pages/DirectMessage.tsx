@@ -35,6 +35,18 @@ import {
 import { MdOutlineSettings } from "react-icons/md";
 import { GiSpeaker } from "react-icons/gi";
 import { BsFillTelephoneFill, BsFillCameraVideoFill } from "react-icons/bs";
+import Messages from "../components/Messages";
+
+const messages = [
+    { from: "computer", text: "Hi, My Name is HoneyChat" },
+    { from: "me", text: "Hey there" },
+    { from: "me", text: "Myself Ferin Patel" },
+    {
+        from: "computer",
+        text:
+            "Nice to meet you. You can send me message and i'll reply you with same message."
+    }
+]
 
 const DirectMessage: React.FC<{}> = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -512,8 +524,8 @@ const DirectMessage: React.FC<{}> = () => {
                 {/* direct messages */}
                 <Box height={"90%"}>
                     <Grid templateRows="repeat(13, 1fr)" height={"100%"} gap={4}>
-                        <GridItem bg="tomato" rowSpan={11}>
-
+                        <GridItem rowSpan={11}>
+                            <Messages messages={messages} />
                         </GridItem>
                         <GridItem rowSpan={2}>
                             <Flex w={"100%"}>
