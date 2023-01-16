@@ -1,14 +1,13 @@
 import React, { useEffect, useRef } from "react";
-import { Flex, Text, Avatar } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import ChatMessage from "./ChatMessage";
+import Message from "../types/message";
 
 type MessagesProps = {
-  messages: Array<{
-    from: string;
-    text: string;
-  }>;
-};
+  messages: Message[];
+}
 
-const Messages: React.FC<MessagesProps> = ({ messages }) => {
+const Messages: React.FC<MessagesProps> = ({messages}) => {
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => elementRef.current?.scrollIntoView());
@@ -16,44 +15,9 @@ const Messages: React.FC<MessagesProps> = ({ messages }) => {
   };
 
   return (
-    <Flex w="100%" h="80%" overflowY="scroll" flexDirection="column" p="3">
-      {messages.map((item, index) => {
-        if (item.from === "me") {
-          return (
-            <Flex key={index} w="100%" justify="flex-end">
-              <Flex
-                bg="black"
-                color="white"
-                minW="100px"
-                maxW="350px"
-                my="1"
-                p="3"
-              >
-                <Text>{item.text}</Text>
-              </Flex>
-            </Flex>
-          );
-        } else {
-          return (
-            <Flex key={index} w="100%">
-              <Avatar
-                name="Computer"
-                src="https://avataaars.io/?avatarStyle=Transparent&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light"
-                bg="blue.300"
-              ></Avatar>
-              <Flex
-                bg="gray.100"
-                color="black"
-                minW="100px"
-                maxW="350px"
-                my="1"
-                p="3"
-              >
-                <Text>{item.text}</Text>
-              </Flex>
-            </Flex>
-          );
-        }
+    <Flex w="100%" h="100%" overflowY="scroll" flexDirection="column" p="3">
+      {messages.map((message) => {
+        return <ChatMessage key={message.id} {...message} />
       })}
       <AlwaysScrollToBottom />
     </Flex>

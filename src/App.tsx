@@ -1,13 +1,18 @@
 import React from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import logo from './logo.svg';
 import './App.css';
 import DirectMessage from './pages/DirectMessage';
+import { SettingProvider } from './contexts/SettingContext';
+import { DirectProvider } from './contexts/DirectContext';
 
 function App() {
   return (
     <ChakraProvider>
-      <DirectMessage />
+      <SettingProvider>
+        <DirectProvider>
+          <DirectMessage />
+        </DirectProvider>
+      </SettingProvider>
     </ChakraProvider>
   );
 }

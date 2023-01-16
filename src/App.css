@@ -47,7 +47,7 @@
 
 /* Style the thumb */
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(131, 129, 129);
+  background-color: rgb(204, 204, 204);
   border-radius: 10px;
 }
 
