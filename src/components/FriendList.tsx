@@ -7,19 +7,22 @@ import {
   ListItem,
   Divider,
 } from "@chakra-ui/react";
-import friends from "../mock/friends.json";
 import FriendItem from "./FriendItem";
 import Setting from "./Setting";
 import { useDirectContext } from "../contexts/DirectContext";
+import { useRecoilValue } from "recoil";
+import { friendsState } from "../utils/atom";
 
 const FriendList: React.FC<{}> = () => {
   const { currentFriend } = useDirectContext();
+  const listFriends = useRecoilValue(friendsState);
+
   return (
     <Box height={"90%"}>
       <Grid templateRows="repeat(20, 1fr)" height={"100%"} gap={4}>
         <GridItem id="list-friend" overflowY={"scroll"} rowSpan={18}>
           <List>
-            {friends.map((friend) => {
+            {listFriends.map((friend) => {
               return (
                 <React.Fragment key={friend.id}>
                   <ListItem bg={currentFriend?.id === friend.id ? "#F3F3F3" : "#ffffff"} _hover={{

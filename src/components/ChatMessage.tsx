@@ -8,7 +8,7 @@ const ChatMessage: React.FC<Message> = ({ from, text }) => {
     return (
       <Flex w="100%" justify="flex-end">
         <Flex
-          borderRadius={"full"}
+          borderRadius={"base"}
           bg="messenger.500"
           color="white"
           maxW="350px"
@@ -26,7 +26,7 @@ const ChatMessage: React.FC<Message> = ({ from, text }) => {
       <Flex w="100%">
         <Avatar name={friend.name} src={friend.avatar} />
         <Flex
-          borderRadius={"full"}
+          borderRadius={"base"}
           bg="gray.100"
           color="black"
           maxW="350px"

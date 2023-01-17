@@ -12,54 +12,69 @@ import { BiSend } from "react-icons/bi";
 import Messages from "../components/Messages";
 import Sidebar from "../components/Sidebar";
 import { useDirectContext } from "../contexts/DirectContext";
-import friends from "../mock/friends.json";
 import Friend from "../types/friend";
 import ChatHeader from "../components/ChatHeader";
 import ChatCall from "../components/ChatCall";
 import uuidv4 from "../utils/uuid";
-import conversations from "../mock/conversations.json";
-import Message from "../types/message";
+import { useRecoilState } from "recoil";
+import { conversationsState, friendsState } from "../utils/atom";
 
 const DirectMessage: React.FC<{}> = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const { setCurrentFriend, currentFriend } = useDirectContext();
+  const [conversations, setConversations] = useRecoilState(conversationsState);
+  const [friends, setFriends] = useRecoilState(friendsState);
 
   const inputMessageHandle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.target.value);
   };
   const sendMessage = () => {
     if (currentFriend) {
-      setMessages((state) => [
-        ...state,
-        {
-          id: uuidv4(),
-          from: "me",
-          text: newMessage,
-        },
-        {
-          id: uuidv4(),
-          from: currentFriend?.id,
-          text: newMessage,
-        },
-      ]);
+      const text = newMessage;
+      setConversations((conversations) => {
+        return {
+          ...conversations,
+          [currentFriend.id]: [
+            ...conversations[currentFriend.id],
+            {
+              id: uuidv4(),
+              from: "me",
+              text: text,
+            },
+          ],
+        };
+      });
+      const friendIndex = friends.findIndex((item) => item.id === currentFriend.id);
+      if (friendIndex !== -1) {
+          const cloneFriend = Object.assign({}, currentFriend);
+          const cloneListFriends = [...friends];
+          cloneListFriends.splice(friendIndex, 1);
+          cloneListFriends.unshift(cloneFriend);
+          setFriends(cloneListFriends);
+      }
       setNewMessage("");
+      setTimeout(() => {
+        setConversations((conversations) => {
+          return {
+            ...conversations,
+            [currentFriend.id]: [
+              ...conversations[currentFriend.id],
+              {
+                id: uuidv4(),
+                from: currentFriend.id,
+                text: text,
+              },
+            ],
+          };
+        });
+      }, 1000);
     }
   };
   useEffect(() => {
     if (setCurrentFriend) {
       setCurrentFriend(friends[0] as Friend);
     }
-  }, [setCurrentFriend]);
-
-  useEffect(() => {
-    if (currentFriend) {
-      const mockConversations = conversations as {
-        [x: string]: Array<Message>;
-      };
-      setMessages(mockConversations[currentFriend.id]);
-    }
-  }, [currentFriend]);
+  }, [friends, setCurrentFriend]);
 
   return (
     <Grid
@@ -95,7 +110,9 @@ const DirectMessage: React.FC<{}> = () => {
         <Box height={"90%"}>
           <Grid templateRows="repeat(13, 1fr)" height={"100%"} gap={4}>
             <GridItem rowSpan={11}>
-              <Messages messages={messages} />
+              {currentFriend?.id && (
+                <Messages messages={conversations[currentFriend.id]} />
+              )}
             </GridItem>
             <GridItem rowSpan={2}>
               <Flex w={"100%"}>
@@ -103,16 +120,14 @@ const DirectMessage: React.FC<{}> = () => {
                   autoFocus
                   size="lg"
                   fontSize="md"
-                  placeholder="Type Something..."
-                  border="none"
+                  placeholder={"Type Something...\nPress Ctrl + Enter to send"}
+                  border="1px"
+                  borderColor={"gray"}
                   resize={"none"}
                   borderRadius="md"
                   value={newMessage}
-                  _focus={{
-                    border: "1px solid black",
-                  }}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
                       e.preventDefault();
                       sendMessage();
                     }

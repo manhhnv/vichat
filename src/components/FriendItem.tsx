@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar, AvatarBadge, Box, Flex, Spacer, Text } from "@chakra-ui/react";
 import React, { useCallback } from "react";
+import { useRecoilValue } from "recoil";
 import { useDirectContext } from "../contexts/DirectContext";
 import useLastMessage from "../hooks/useLastMessage";
+import { conversationsState } from "../utils/atom";
 
 type FriendItemProps = {
   id: string;
   name: string;
   avatar: string;
-  lastMessage: string;
-  lastMessageDate: string;
   isOnline: boolean;
 };
 
@@ -17,12 +17,12 @@ const FriendItem: React.FC<FriendItemProps> = ({
   id,
   name,
   avatar,
-  lastMessage,
-  lastMessageDate,
   isOnline,
 }) => {
-  const formattedLastMessage = useLastMessage(lastMessage);
   const { setCurrentFriend } = useDirectContext();
+  const conversations = useRecoilValue(conversationsState);
+  const lastMessage = conversations[id][conversations[id].length - 1];
+  const formattedLastMessage = useLastMessage(lastMessage.text);
 
   const switchMessage = useCallback(() => {
     if (setCurrentFriend) {
@@ -55,10 +55,11 @@ const FriendItem: React.FC<FriendItemProps> = ({
           </Box>
           <Flex>
             <Text flex={1} as={"div"}>
-              You: {formattedLastMessage}
+              {lastMessage.from === "me" ? "You" : name.split(" ")[0]}:{" "}
+              {formattedLastMessage}
             </Text>
             <Spacer />
-            <Text as={"div"}>{lastMessageDate}</Text>
+            {/* <Text as={"div"}>{lastMessageDate}</Text> */}
           </Flex>
         </Flex>
       </Box>

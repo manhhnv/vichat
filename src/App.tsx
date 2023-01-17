@@ -4,16 +4,19 @@ import './App.css';
 import DirectMessage from './pages/DirectMessage';
 import { SettingProvider } from './contexts/SettingContext';
 import { DirectProvider } from './contexts/DirectContext';
+import { RecoilRoot } from 'recoil';
 
 function App() {
   return (
-    <ChakraProvider>
-      <SettingProvider>
-        <DirectProvider>
-          <DirectMessage />
-        </DirectProvider>
-      </SettingProvider>
-    </ChakraProvider>
+    <RecoilRoot>
+      <ChakraProvider>
+        <SettingProvider>
+          <DirectProvider>
+            <DirectMessage />
+          </DirectProvider>
+        </SettingProvider>
+      </ChakraProvider>
+    </RecoilRoot>
   );
 }
 
