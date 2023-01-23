@@ -13,3 +13,8 @@ export const friendsState = atom<Friend[]>({
   key: "friendsState",
   default: friends,
 });
+
+export const authState = atom<Friend | undefined>({
+    key: 'authState',
+    default: undefined,
+});

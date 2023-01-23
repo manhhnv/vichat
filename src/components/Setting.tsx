@@ -18,6 +18,8 @@ import { MdOutlineSettings } from "react-icons/md";
 import { GiSpeaker, GiSpeakerOff } from "react-icons/gi";
 import React from "react";
 import { useSettingContext } from "../contexts/SettingContext";
+import { useSetRecoilState } from "recoil";
+import { authState } from "../utils/atom";
 
 const Setting: React.FC<{}> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,6 +29,10 @@ const Setting: React.FC<{}> = () => {
     isEnableSound,
     toggleEnableSound,
   } = useSettingContext();
+  const setAuthState = useSetRecoilState(authState);
+  const signOutHandle = () => {
+    setAuthState(undefined)
+  }
 
   return (
     <>
@@ -81,7 +87,7 @@ const Setting: React.FC<{}> = () => {
               </ListItem>
               <Divider mb={4} />
               <ListItem mb={4}>
-                <Button colorScheme={"red"} variant="outline">
+                <Button onClick={signOutHandle} colorScheme={"red"} variant="outline">
                   Sign out
                 </Button>
               </ListItem>
