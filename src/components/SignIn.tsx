@@ -53,25 +53,30 @@ const SignIn = () => {
   };
   return (
     <React.Fragment>
-      <Input
-        ref={usernameRef}
-        type={"text"}
-        placeholder={"Username"}
-        w={"100%"}
-      />
-      <Input
-        ref={passwordRef}
-        type={"password"}
-        placeholder={"Password"}
-        w={"100%"}
-      />
-      <Button
-        onClick={handleSignIn}
-        colorScheme={"messenger"}
-        variant={"solid"}
-      >
-        Sign in
-      </Button>
+      <form onSubmit={handleSignIn}>
+        <Input
+          ref={usernameRef}
+          type={"text"}
+          placeholder={"Username"}
+          w={"100%"}
+          defaultValue="manhnv"
+        />
+        <Input
+          ref={passwordRef}
+          type={"password"}
+          placeholder={"Password"}
+          w={"100%"}
+          my="5"
+          defaultValue="manhnv"
+        />
+        <Button
+          type="submit"
+          colorScheme={"messenger"}
+          variant={"solid"}
+        >
+          Sign in
+        </Button>
+      </form>
     </React.Fragment>
   );
 };
